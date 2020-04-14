@@ -47,6 +47,11 @@ class PostController extends Controller
         $post->tags()->attach($tagsId);
         flash()->overlay('Post created successfully.');
 
+        if(auth()->user()->is_admin) {
+            $link = route('posts.show', $post);
+            flash()->success('Neuer Post: <a href="' . $link . '">' . $post->title . '</a>');
+        }
+
         return redirect('/admin/posts');
     }
 
