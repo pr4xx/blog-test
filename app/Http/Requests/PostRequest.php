@@ -26,6 +26,7 @@ class PostRequest extends FormRequest
         return [
             'title'       => 'required',
             'body'        => 'required',
+            'user_id'     => auth()->user()->is_admin ? 'required' : '',
             'category_id' => 'required',
             'tags'        => 'required',
         ];

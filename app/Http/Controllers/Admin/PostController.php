@@ -7,6 +7,7 @@ use App\Http\Requests\PostRequest;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
+use App\User;
 
 class PostController extends Controller
 {
@@ -19,10 +20,11 @@ class PostController extends Controller
 
     public function create()
     {
+        $users = User::pluck('name', 'id')->all();
         $categories = Category::pluck('name', 'id')->all();
         $tags = Tag::pluck('name', 'name')->all();
 
-        return view('admin.posts.create', compact('categories', 'tags'));
+        return view('admin.posts.create', compact('users', 'categories', 'tags'));
     }
 
     public function store(PostRequest $request)
@@ -31,6 +33,7 @@ class PostController extends Controller
             [
                 'title'       => $request->title,
                 'body'        => $request->body,
+                'user_id'     => auth()->user()->is_admin ? $request->user_id : null,
                 'category_id' => $request->category_id,
             ]
         );
@@ -56,16 +59,18 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
+        // Todo: this check needs to happen in update action as well!
         if ($post->user_id != auth()->user()->id && auth()->user()->is_admin == false) {
             flash()->overlay("You can't edit other peoples post.");
 
             return redirect('/admin/posts');
         }
 
+        $users = User::pluck('name', 'id')->all();
         $categories = Category::pluck('name', 'id')->all();
         $tags = Tag::pluck('name', 'name')->all();
 
-        return view('admin.posts.edit', compact('post', 'categories', 'tags'));
+        return view('admin.posts.edit', compact('post', 'users', 'categories', 'tags'));
     }
 
     public function update(PostRequest $request, Post $post)
@@ -74,6 +79,7 @@ class PostController extends Controller
             [
                 'title'       => $request->title,
                 'body'        => $request->body,
+                'user_id'     => auth()->user()->is_admin ? $request->user_id : null,
                 'category_id' => $request->category_id,
             ]
         );

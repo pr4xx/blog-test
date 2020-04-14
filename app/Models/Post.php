@@ -27,6 +27,14 @@ class Post extends Model
             }
         );
 
+        static::updating(
+            function ($post) {
+                if (is_null($post->user_id)) {
+                    $post->user_id = auth()->user()->id;
+                }
+            }
+        );
+
         static::deleting(
             function ($post) {
                 $post->comments()->delete();
