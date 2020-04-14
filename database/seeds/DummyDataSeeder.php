@@ -23,19 +23,19 @@
          Post::truncate();
          Comment::truncate();
 
-         DB::table('posts')->insert([
-             'title'        => 'Test 1',
-             'body'         => 'Das ist ein Test',
-             'user_id'      => 100,
-             'category_id'  => rand(1, 10),
-             'is_published' => rand(0, 1)
-         ]);
-
          factory(Category::class, 10)->create();
          factory(Tag::class, 10)->create();
          factory(User::class, 9)->create();
          factory(Post::class, 25)->create();
          factory(Comment::class, 40)->create();
+
+         DB::table('posts')->insert([
+             'title'        => 'Test 1',
+             'body'         => 'Das ist ein Test',
+             'user_id'      => rand(1, 10),
+             'category_id'  => rand(1, 10),
+             'is_published' => rand(0, 1)
+         ]);
 
          $data = [];
          for($i=0; $i<60; $i++) {
