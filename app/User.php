@@ -2,10 +2,10 @@
 
 namespace App;
 
-use App\Models\Post;
 use App\Models\Comment;
-use Illuminate\Notifications\Notifiable;
+use App\Models\Post;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -19,7 +19,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password'
+        'password',
     ];
 
     /**
@@ -28,23 +28,28 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     protected static function boot()
     {
         parent::boot();
 
-        static::creating(function ($user) {
-            if(empty($user->api_token)) {
-                $user->api_token = str_random(50);
+        static::creating(
+            function ($user) {
+                if (empty($user->api_token)) {
+                    $user->api_token = str_random(50);
+                }
             }
-        });
+        );
 
-        static::deleting(function ($user) {
-            $user->posts()->delete();
-            $user->comments()->delete();
-        });
+        static::deleting(
+            function ($user) {
+                $user->posts()->delete();
+                $user->comments()->delete();
+            }
+        );
     }
 
     public function posts()

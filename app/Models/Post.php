@@ -3,9 +3,6 @@
 namespace App\Models;
 
 use App\User;
-use App\Models\Tag;
-use App\Models\Comment;
-use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
@@ -15,23 +12,27 @@ class Post extends Model
         'body',
         'user_id',
         'category_id',
-        'is_published'
+        'is_published',
     ];
 
     protected static function boot()
     {
         parent::boot();
 
-        static::creating(function ($post) {
-            if(is_null($post->user_id)) {
-                $post->user_id = auth()->user()->id;
+        static::creating(
+            function ($post) {
+                if (is_null($post->user_id)) {
+                    $post->user_id = auth()->user()->id;
+                }
             }
-        });
+        );
 
-        static::deleting(function ($post) {
-            $post->comments()->delete();
-            $post->tags()->detach();
-        });
+        static::deleting(
+            function ($post) {
+                $post->comments()->delete();
+                $post->tags()->detach();
+            }
+        );
     }
 
     public function category()

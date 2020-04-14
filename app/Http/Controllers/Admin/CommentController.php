@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 
@@ -23,13 +22,14 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Comment $comment)
     {
-        if($comment->user_id != auth()->user()->id && auth()->user()->is_admin == false) {
+        if ($comment->user_id != auth()->user()->id && auth()->user()->is_admin == false) {
             flash()->overlay("You can't delete other peoples comment.");
+
             return redirect('/admin/posts');
         }
 

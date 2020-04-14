@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Tag;
-use App\Models\Post;
-use App\Models\Category;
-use Illuminate\Http\Request;
-use App\Http\Requests\PostRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PostRequest;
+use App\Models\Category;
+use App\Models\Post;
+use App\Models\Tag;
 
 class PostController extends Controller
 {
@@ -28,15 +27,19 @@ class PostController extends Controller
 
     public function store(PostRequest $request)
     {
-        $post = Post::create([
-            'title'       => $request->title,
-            'body'        => $request->body,
-            'category_id' => $request->category_id
-        ]);
+        $post = Post::create(
+            [
+                'title'       => $request->title,
+                'body'        => $request->body,
+                'category_id' => $request->category_id,
+            ]
+        );
 
-        $tagsId = collect($request->tags)->map(function($tag) {
-            return Tag::firstOrCreate(['name' => $tag])->id;
-        });
+        $tagsId = collect($request->tags)->map(
+            function ($tag) {
+                return Tag::firstOrCreate(['name' => $tag])->id;
+            }
+        );
 
         $post->tags()->attach($tagsId);
         flash()->overlay('Post created successfully.');
@@ -53,8 +56,9 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
-        if($post->user_id != auth()->user()->id && auth()->user()->is_admin == false) {
+        if ($post->user_id != auth()->user()->id && auth()->user()->is_admin == false) {
             flash()->overlay("You can't edit other peoples post.");
+
             return redirect('/admin/posts');
         }
 
@@ -66,15 +70,19 @@ class PostController extends Controller
 
     public function update(PostRequest $request, Post $post)
     {
-        $post->update([
-            'title'       => $request->title,
-            'body'        => $request->body,
-            'category_id' => $request->category_id
-        ]);
+        $post->update(
+            [
+                'title'       => $request->title,
+                'body'        => $request->body,
+                'category_id' => $request->category_id,
+            ]
+        );
 
-        $tagsId = collect($request->tags)->map(function($tag) {
-            return Tag::firstOrCreate(['name' => $tag])->id;
-        });
+        $tagsId = collect($request->tags)->map(
+            function ($tag) {
+                return Tag::firstOrCreate(['name' => $tag])->id;
+            }
+        );
 
         $post->tags()->sync($tagsId);
         flash()->overlay('Post updated successfully.');
@@ -84,8 +92,9 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
-        if($post->user_id != auth()->user()->id && auth()->user()->is_admin == false) {
+        if ($post->user_id != auth()->user()->id && auth()->user()->is_admin == false) {
             flash()->overlay("You can't delete other peoples post.");
+
             return redirect('/admin/posts');
         }
 

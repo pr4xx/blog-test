@@ -10,13 +10,13 @@ class AdminMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-        if(! Auth::user()->is_admin) {
+        if (!Auth::user()->is_admin) {
             if ($request->expectsJson()) {
                 return response()->json(['error' => 'Unauthenticated. You are not an admin.'], 401);
             }

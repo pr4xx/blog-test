@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tag;
-use App\Models\Post;
-use App\Models\Comment;
 use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Models\Comment;
+use App\Models\Post;
+use App\Models\Tag;
 
 class HomeController extends Controller
 {
@@ -27,9 +26,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $posts      = Post::count();
-        $comments   = Comment::count();
-        $tags       = Tag::count();
+        $posts = Post::count();
+        $comments = Comment::count();
+        $tags = Tag::count();
         $categories = Category::count();
 
         return view('home', get_defined_vars());

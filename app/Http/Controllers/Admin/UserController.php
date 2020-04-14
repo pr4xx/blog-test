@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\User;
 
 class UserController extends Controller
 {
@@ -23,12 +22,12 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(User $user)
     {
-        if(auth()->user() == $user) {
+        if (auth()->user() == $user) {
             flash()->overlay("You can't delete yourself.");
 
             return redirect('/admin/users');
